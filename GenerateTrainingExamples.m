@@ -7,7 +7,7 @@ close all; clear all;clc;
 
 % set the default colormap
 set(groot,'DefaultFigureColormap',gray);
-close 1;
+close;
 
 %% ------------------------------------------------------------------------
 %                 Artificial dataset path and settings
@@ -15,9 +15,9 @@ close 1;
 
 % path to the ThunderSTORM simulated stack of images in tiff format with 
 % the accompanying ground truth positions in csv format
-datapath = 'C:\Users\nanobio\Desktop\Elias\Deep-STORM Code';
-tiff_filename = 'Artificialdataset.tif';
-csv_filename = 'positions.csv';
+datapath = '/Users/jake/Documents/Research/Super-Resolution/Deep-STORM/data';
+tiff_filename = 'training_data.tif';
+csv_filename = 'training_positions.csv';
 
 % add the path to the data
 addpath(genpath(datapath));
@@ -150,7 +150,7 @@ for frmNum=1:numImages
     end
     title('Low-res Measurements');
     subplot(1,2,2);imagesc(HeatmapImage);axis off; axis square;title(['Heatmap Approximation \sigma=' num2str(gaussian_sigma)]);  
-    suptitle(['Extracting Training Examples: ' num2str(frmNum) ' out of ' num2str(numImages) ', Patches Acquired ' num2str(k)]);
+    %suptitle(['Extracting Training Examples: ' num2str(frmNum) ' out of ' num2str(numImages) ', Patches Acquired ' num2str(k)]);
     drawnow;
 end
 

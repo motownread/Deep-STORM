@@ -3,14 +3,14 @@
 # %%
 
 # Import modules and libraries
-from keras.models import Model
-from keras.layers import Input, Activation, UpSampling2D, Convolution2D, MaxPooling2D, BatchNormalization
-from keras.callbacks import Callback
-from keras import backend as K
-from keras import optimizers
-from keras import losses
 import tensorflow as tf
 import numpy as np
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Input, Activation, UpSampling2D, Convolution2D, MaxPooling2D, BatchNormalization
+from tensorflow.keras.callbacks import Callback
+from tensorflow.keras import backend as K
+from tensorflow.keras import optimizers
+from tensorflow.keras import losses
         
 # define a function that projects an image to the range [0,1]
 def project_01(im):
@@ -107,7 +107,7 @@ def buildModel(input_dim):
                                   activation="linear", use_bias = False,\
                                   kernel_initializer="Orthogonal",name='Prediction')(act_)
     model = Model (inputs= input_, outputs=density_pred)
-    opt = optimizers.Adam(lr=0.001)
+    opt = optimizers.Adam(learning_rate=0.001)
     model.compile(optimizer=opt, loss = L1L2loss(input_dim))
     return model
 

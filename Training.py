@@ -9,6 +9,7 @@ import scipy.io as sio
 import argparse
 from os.path import abspath
 from sklearn.model_selection import train_test_split
+import keras
 from keras import backend as K
 from keras.preprocessing.image import ImageDataGenerator
 from keras.callbacks import ModelCheckpoint
@@ -31,6 +32,9 @@ def train_model(filename, weights_name, meanstd_name):
     function saves the weights of the trained model to a hdf5, and the 
     normalization factors to a mat file. These will be loaded later for testing 
     the model in test_model.    
+
+
+    This script has been modified by Jake to work with versions of tf/keras > 2.5.0
     """
     
     # for reproducibility
@@ -98,7 +102,8 @@ def train_model(filename, weights_name, meanstd_name):
     Y_test = y_test.reshape(y_test.shape[0], psize, psize, 1)
 
     # Set the dimensions ordering according to tensorflow consensous
-    K.set_image_dim_ordering('tf')
+    # Newer versions of keras renamed this function with new arguement 'tf' -> 'channels_last'
+    K.set_image_data_format("channels_last")
 
     # Save the model weights after each epoch if the validation loss decreased
     checkpointer = ModelCheckpoint(filepath=weights_name, verbose=1,
