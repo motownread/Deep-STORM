@@ -12,7 +12,7 @@ import time
 from os.path import abspath
 
 def test_model(datafile, weights_file, meanstd_file, savename, \
-               upsampling_factor=8, debug=0):
+               upsampling_factor=8, debug=0, plot_results=1):
     """
     This function tests a trained model on the desired test set, given the 
     tiff stack of test images, learned weights, and normalization factors.
@@ -24,6 +24,7 @@ def test_model(datafile, weights_file, meanstd_file, savename, \
     savename          - the filename for saving the recovered SR image
     upsampling_factor - the upsampling factor for reconstruction (default 8)
     debug             - boolean whether to save individual frame predictions (default 0)
+    plot-results      - boolean whether to save individual frame predictions (default 1)
     
     # Outputs
     function saves a mat file with the recovered image, and optionally saves 
@@ -81,14 +82,15 @@ def test_model(datafile, weights_file, meanstd_file, savename, \
     WideField = np.squeeze(np.sum(Images_norm, axis=0))
     Recovery = np.squeeze(np.sum(predicted_density, axis=0))
     
-    # Look at the sum image
-    f, (ax1, ax2) = plt.subplots(1, 2, sharey=True, sharex=True)
-    ax1.imshow(WideField)
-    ax1.set_title('Wide Field')
-    ax2.imshow(Recovery)
-    ax2.set_title('Sum of Predictions')
-    f.subplots_adjust(hspace=0)
-    plt.show()
+    if plot_results:
+        # Look at the sum image
+        f, (ax1, ax2) = plt.subplots(1, 2, sharey=True, sharex=True)
+        ax1.imshow(WideField)
+        ax1.set_title('Wide Field')
+        ax2.imshow(Recovery)
+        ax2.set_title('Sum of Predictions')
+        f.subplots_adjust(hspace=0)
+        plt.show()
     
     # Save predictions to a matfile to open later in matlab
     mdict = {"Recovery": Recovery}
@@ -125,6 +127,8 @@ if __name__ == '__main__':
     # with individual frame predictions. In case debug=1 the resulting individual 
     # predictions will be saved to a matfile whose path is "savename_predictions.mat" 
     parser.add_argument('--debug', type=int, default=0, help="boolean (0/1) for saving individual predictions")
+
+    parser.add_argument('--plot_results', type=int, default=1, help="skip plotting results via matlib")
     
     # parse the input arguments
     args = parser.parse_args()
@@ -132,6 +136,6 @@ if __name__ == '__main__':
     # run the testing/reconstruction process
     test_model(abspath(args.datafile), abspath(args.weights_name), \
                abspath(args.meanstd_name), abspath(args.savename), \
-               args.upsampling_factor, args.debug)
+               args.upsampling_factor, args.debug, args.plot_results)
     
     
